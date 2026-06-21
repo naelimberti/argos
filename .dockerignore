@@ -1,0 +1,27 @@
+# Fichiers inutiles dans l'image Docker
+.git
+.gitignore
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+.mypy_cache
+.ruff_cache
+
+# Données locales (remplacées par le volume persistant en prod)
+data/
+logs/
+exports/
+
+# Fichiers de développement
+*.bat
+watchdog.py
+take_screenshot.py
+dashboard_screenshot*.png
+.env
+
+# Tests (pas nécessaires en prod)
+tests/
+
+# Docs
+*.md

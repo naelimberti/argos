@@ -1,0 +1,115 @@
+# ============================================================
+# ARGOS — Règles de gestion du risque
+# ============================================================
+# Ces règles sont appliquées par le Risk Manager Agent.
+# Toute modification doit être documentée et testée.
+# ============================================================
+
+# ------------------------------------------------------------
+# Paper trading — portefeuille fictif
+# ------------------------------------------------------------
+paper_trading:
+  initial_capital_eur: 10.0
+
+  # Limites journalières
+  max_trades_per_day: 9999
+  max_daily_loss_percent: 5.0      # arrêt si -5% du capital sur la journée
+
+  # Positions
+  max_open_positions: 10           # 10 positions simultanées max
+  max_position_size_percent: 35.0  # max 35% — géré automatiquement par le learning agent
+
+  # Sécurité
+  max_consecutive_losses: 3        # arrêt après 3 pertes consécutives
+  cooldown_after_loss_minutes: 60  # pause après une perte
+
+  # Obligations sur chaque trade
+  stop_loss_required: true
+  take_profit_required: true
+  allow_leverage: false
+
+  # Ratio risque/rendement minimum
+  min_risk_reward_ratio: 2.0       # TP doit être au moins 2x le SL
+
+  # Score de confiance minimum pour accepter un trade
+  min_confidence_score: 0.70       # 0.0 à 1.0
+
+# ------------------------------------------------------------
+# Filtres de marché
+# ------------------------------------------------------------
+market_filters:
+  # Spread maximum autorisé (en % du prix)
+  max_spread_percent: 0.30
+
+  # Volatilité maximum (variation sur 24h en %)
+  max_volatility_24h_percent: 8.0
+
+  # Volume minimum sur 24h (en USD) pour considérer un actif liquide
+  min_volume_24h_usd: 1_000_000_000  # 1 milliard USD (BTC/ETH sont très liquides)
+
+  # Variation de prix anormale sur 1h (signal de danger)
+  max_price_change_1h_percent: 3.0
+
+# ------------------------------------------------------------
+# Filtres sur les signaux
+# ------------------------------------------------------------
+signal_filters:
+  # Nombre minimum de signaux alignés pour proposer un trade
+  min_aligned_signals: 3
+
+  # Confirmation sur deux timeframes obligatoire
+  require_multi_timeframe_confirmation: true
+
+  # Interdire les trades pendant les heures de faible liquidité
+  avoid_low_liquidity_hours: true
+  low_liquidity_hours_utc: [0, 1, 2, 3, 4]  # minuit à 4h UTC
+
+# ------------------------------------------------------------
+# Gestion des frais (simulation réaliste)
+# ------------------------------------------------------------
+fees:
+  # Frais de trading simulés (taker fee, en %)
+  taker_fee_percent: 0.10
+
+  # Slippage estimé (en %)
+  slippage_estimate_percent: 0.05
+
+  # Spread estimé si non disponible (en %)
+  default_spread_percent: 0.10
+
+  # Un trade est refusé si le gain net après frais est inférieur à ce seuil (en %)
+  min_net_gain_after_fees_percent: 0.20
+
+# ------------------------------------------------------------
+# Règles de blocage automatique
+# ------------------------------------------------------------
+auto_stop:
+  # Arrêt si la perte journalière dépasse ce montant (en EUR, paper)
+  max_daily_loss_eur: 0.50
+
+  # Arrêt si N erreurs API consécutives
+  max_api_errors: 5
+
+  # Arrêt si volatilité extrême détectée (en %)
+  extreme_volatility_threshold_percent: 15.0
+
+  # Arrêt si drawdown du portefeuille dépasse ce seuil (en %)
+  max_portfolio_drawdown_percent: 20.0
+
+# ------------------------------------------------------------
+# Règles spécifiques mode réel (futur — désactivé)
+# ------------------------------------------------------------
+real_trading:
+  enabled: false  # Ne jamais mettre à true sans validation complète
+
+  # Conditions minimales avant activation (vérification automatique)
+  min_paper_trading_days: 90
+  min_paper_trades: 300
+  require_positive_performance: true
+  require_manual_validation: true
+
+  # Limites strictes si activé
+  max_capital_eur: 10.0
+  max_trades_per_day: 1
+  max_daily_loss_eur: 1.0
+  max_consecutive_losses: 2

@@ -1,0 +1,32 @@
+# Environnement
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Base de données (contient des données personnelles)
+data/argos.db
+data/*.db
+
+# Logs (peuvent contenir des infos sensibles)
+logs/*.log
+
+# Exports et rapports générés
+exports/*.csv
+reports/weekly/*.md
+
+# Outils
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+dist/
+build/
+*.egg-info/
+.coverage
+htmlcov/
+
+# OS
+.DS_Store
+Thumbs.db

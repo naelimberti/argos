@@ -1,0 +1,68 @@
+# ============================================================
+# ARGOS — Configuration générale du système
+# ============================================================
+
+system:
+  name: ARGOS
+  version: "0.1.0"
+  mode: paper  # paper | real (real désactivé par défaut)
+
+# ------------------------------------------------------------
+# Actifs surveillés
+# ------------------------------------------------------------
+assets:
+  - symbol: BTC
+    name: Bitcoin
+    pair_eur: BTC/EUR
+    pair_usdt: BTC/USDT
+    enabled: true
+
+
+# ------------------------------------------------------------
+# Timeframes d'analyse
+# ------------------------------------------------------------
+timeframes:
+  primary: "1h"      # timeframe principal pour les signaux
+  confirmation: "4h" # timeframe de confirmation de tendance
+  context: "1d"      # contexte de marché global
+
+# ------------------------------------------------------------
+# Scheduler
+# ------------------------------------------------------------
+scheduler:
+  scan_interval_minutes: 15
+  max_consecutive_errors: 5   # arrêt après N erreurs consécutives
+  cycle_timeout_seconds: 120  # timeout d'un cycle
+
+# ------------------------------------------------------------
+# Fournisseurs de données
+# ------------------------------------------------------------
+market_data:
+  primary_provider: coingecko
+  fallback_provider: binance
+  cache_duration_seconds: 60  # évite les appels redondants
+  history_days: 90            # historique à récupérer pour l'analyse
+
+# ------------------------------------------------------------
+# Logging
+# ------------------------------------------------------------
+logging:
+  level: INFO  # DEBUG | INFO | WARNING | ERROR
+  max_file_size_mb: 10
+  backup_count: 5
+  format: "[{time}] [{level}] [{module}] {message}"
+
+# ------------------------------------------------------------
+# Dashboard
+# ------------------------------------------------------------
+dashboard:
+  port: 8501
+  refresh_interval_seconds: 30
+
+# ------------------------------------------------------------
+# Exports et rapports
+# ------------------------------------------------------------
+reporting:
+  weekly_report_day: monday   # jour de génération du rapport hebdo
+  weekly_report_hour: 8       # heure (UTC)
+  export_format: csv

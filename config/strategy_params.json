@@ -1,0 +1,6 @@
+{
+  "position_size_pct": 0.35,
+  "long_position_size_pct": 0.15,
+  "short_position_size_pct": 0.25,
+  "BTC_momentum_threshold": 0.1
+}

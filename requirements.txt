@@ -1,0 +1,45 @@
+# ============================================================
+# ARGOS — Dépendances Python
+# ============================================================
+
+# --- Core ---
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+
+# --- Base de données ---
+sqlmodel>=0.0.14
+aiosqlite>=0.19.0
+
+# --- Données de marché ---
+pandas>=2.0.0
+requests>=2.31.0
+httpx>=0.25.0
+
+# --- Indicateurs techniques ---
+pandas-ta>=0.3.14b
+
+# --- Scheduler ---
+apscheduler>=3.10.0
+
+# --- Dashboard ---
+streamlit>=1.28.0
+plotly>=5.17.0
+
+# --- CLI ---
+click>=8.1.0
+
+# --- Configuration ---
+pyyaml>=6.0.0
+
+# --- Exchanges (futur) ---
+ccxt>=4.0.0
+
+# --- Tests ---
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-mock>=3.11.0
+
+# --- Qualité de code ---
+ruff>=0.1.0
+mypy>=1.6.0

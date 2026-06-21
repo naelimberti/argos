@@ -1,0 +1,42 @@
+# fly.toml — Configuration de déploiement ARGOS sur Fly.io
+# Région : cdg (Paris) — latence minimale avec CoinGecko EU
+# Volume persistant : argos_data → /data (SQLite + logs)
+
+app = "argos-trading"
+primary_region = "cdg"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  TRADING_MODE        = "paper"
+  ENABLE_REAL_TRADING = "false"
+  DATABASE_PATH       = "/data/argos.db"
+  LOG_PATH            = "/data/argos.log"
+  LOG_LEVEL           = "INFO"
+  PYTHONUNBUFFERED    = "1"
+
+# ---- Dashboard Streamlit ----
+[http_service]
+  internal_port        = 8501
+  force_https          = true
+  auto_stop_machines   = false   # ne JAMAIS endormir la machine
+  auto_start_machines  = true
+  min_machines_running = 1       # toujours au moins 1 instance active
+
+  [[http_service.checks]]
+    grace_period = "30s"
+    interval     = "60s"
+    method       = "GET"
+    path         = "/_stcore/health"
+    timeout      = "10s"
+
+# ---- Volume persistant (SQLite + logs) ----
+[[mounts]]
+  source      = "argos_data"
+  destination = "/data"
+
+# ---- Ressources machine (shared-cpu-1x = tier gratuit) ----
+[[vm]]
+  size   = "shared-cpu-1x"
+  memory = "512mb"
