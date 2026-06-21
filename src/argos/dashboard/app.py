@@ -53,6 +53,52 @@ st.set_page_config(
 )
 
 # ============================================================
+# Auth gate — code d'accès
+# ============================================================
+
+def _check_auth() -> bool:
+    """Vérifie le code d'accès. Retourne True si l'utilisateur est authentifié."""
+    access_code = st.secrets.get("ACCESS_CODE", "argos2024")
+
+    if st.session_state.get("authenticated"):
+        return True
+
+    st.markdown("""
+    <style>
+    html, body, [data-testid="stApp"] {
+        background-color: #080B12 !important;
+        color: #E2E8F0 !important;
+        font-family: 'Inter', -apple-system, sans-serif !important;
+    }
+    [data-testid="stHeader"] { display: none !important; }
+    </style>
+    """, unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns([1, 1.5, 1])
+    with col2:
+        st.markdown("<br><br><br>", unsafe_allow_html=True)
+        st.markdown("""
+        <div style="text-align:center; margin-bottom:2rem;">
+            <span style="font-size:2.5rem;">⬡</span>
+            <h1 style="color:#E2E8F0; font-size:1.8rem; margin:0.5rem 0 0.2rem;">ARGOS</h1>
+            <p style="color:#64748B; font-size:0.85rem; margin:0;">Trading Terminal · Paper Mode</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        code = st.text_input("Code d'accès", type="password", placeholder="••••••••",
+                             label_visibility="collapsed")
+        if st.button("Accéder →", use_container_width=True):
+            if code == access_code:
+                st.session_state["authenticated"] = True
+                st.rerun()
+            else:
+                st.error("Code incorrect.")
+    return False
+
+if not _check_auth():
+    st.stop()
+
+# ============================================================
 # Design System — CSS complet
 # ============================================================
 
