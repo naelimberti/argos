@@ -22,6 +22,15 @@ if str(_SRC) not in sys.path:
 os.environ.setdefault("TRADING_MODE", "paper")
 os.environ.setdefault("ENABLE_REAL_TRADING", "false")
 
+# Injecte les secrets Streamlit Cloud dans les variables d'environnement
+try:
+    if hasattr(st, "secrets"):
+        for _k in ("DATABASE_URL", "DATABASE_PATH"):
+            if _k in st.secrets and not os.environ.get(_k):
+                os.environ[_k] = str(st.secrets[_k])
+except Exception:
+    pass
+
 from argos.database.db import get_engine
 from argos.database.models import (
     MarketSnapshot,

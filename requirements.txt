@@ -10,6 +10,7 @@ pydantic-settings>=2.0.0
 # --- Base de données ---
 sqlmodel>=0.0.14
 aiosqlite>=0.19.0
+psycopg2-binary>=2.9.0
 
 # --- Données de marché ---
 pandas>=2.0.0

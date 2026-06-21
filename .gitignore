@@ -27,6 +27,9 @@ build/
 .coverage
 htmlcov/
 
+# Streamlit secrets (ne jamais commiter)
+.streamlit/secrets.toml
+
 # OS
 .DS_Store
 Thumbs.db
