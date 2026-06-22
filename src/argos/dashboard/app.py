@@ -466,13 +466,16 @@ def _session():
 
 def _load_trades() -> pd.DataFrame:
     try:
+        engine = _get_engine()
+        db_url = str(engine.url)
         with _session() as s:
             rows = s.exec(select(PaperTrade).order_by(PaperTrade.entry_time)).all()
             if not rows:
+                st.warning(f"[DB] 0 trades — moteur: {db_url[:60]}")
                 return pd.DataFrame()
             records = [r.model_dump() for r in rows]
     except Exception as e:
-        st.warning(f"[DB] _load_trades error: {e} | URL: {os.environ.get('DATABASE_URL','NOT SET')[:40]}")
+        st.warning(f"[DB] erreur: {e} | URL: {os.environ.get('DATABASE_URL','NOT SET')[:50]}")
         return pd.DataFrame()
     df = pd.DataFrame(records)
     for col in ["entry_time", "exit_time"]:
