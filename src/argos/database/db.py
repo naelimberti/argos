@@ -16,33 +16,42 @@ logger = get_logger("database")
 
 
 def _get_database_url() -> str:
-    # Priorité 1 : DATABASE_URL explicite (PostgreSQL Supabase, Railway, etc.)
+    # Priorité 1 : DATABASE_URL explicite dans os.environ
     url = os.getenv("DATABASE_URL", "")
+    if not url:
+        # Priorité 2 : st.secrets (Streamlit Cloud — ne met pas les secrets dans os.environ)
+        try:
+            import streamlit as st
+            url = str(st.secrets.get("DATABASE_URL", ""))
+        except Exception:
+            pass
     if url:
         # Supabase renvoie parfois "postgres://" — SQLAlchemy veut "postgresql://"
         if url.startswith("postgres://"):
             url = url.replace("postgres://", "postgresql://", 1)
         return url
-    # Priorité 2 : SQLite local
+    # Priorité 3 : SQLite local
     db_path = Path(os.getenv("DATABASE_PATH", "data/argos.db"))
     db_path.parent.mkdir(parents=True, exist_ok=True)
     return f"sqlite:///{db_path}"
 
 
 _engine = None
+_engine_url = None
 
 
 def get_engine():
-    global _engine
-    if _engine is None:
-        url = _get_database_url()
+    global _engine, _engine_url
+    url = _get_database_url()
+    if _engine is None or url != _engine_url:
         is_sqlite = url.startswith("sqlite")
         kwargs = {"echo": False}
         if is_sqlite:
             kwargs["connect_args"] = {"check_same_thread": False}
         _engine = create_engine(url, **kwargs)
+        _engine_url = url
         backend = "SQLite" if is_sqlite else "PostgreSQL"
-        logger.debug(f"Moteur {backend} créé")
+        logger.debug(f"Moteur {backend} créé : {url[:40]}...")
     return _engine
 
 
