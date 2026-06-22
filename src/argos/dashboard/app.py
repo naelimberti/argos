@@ -929,15 +929,6 @@ def main():
     </div>
     """, unsafe_allow_html=True)
 
-    # ── Diagnostic DB (temporaire) ────────────────────────────
-    import argos.database.db as _db_mod
-    _computed_url = _db_mod._get_database_url()
-    _cached_url = _db_mod._engine_url or "None"
-    _eng_url = str(_get_engine().url)
-    _backend = "PostgreSQL ✅" if "postgresql" in _eng_url else f"SQLite ❌"
-    _env_val = (os.environ.get("DATABASE_URL") or "")[:20]
-    st.info(f"DB: {_backend} | computed: {_computed_url[:30]} | cached_url: {_cached_url[:30]} | env: {_env_val}")
-
     # ── Données ───────────────────────────────────────────────
     initial_capital = _initial_capital()
     trades_df       = _load_trades()
