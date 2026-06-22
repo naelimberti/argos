@@ -94,11 +94,11 @@ def _check_auth() -> bool:
         code = st.text_input("Code d'accès", type="password", placeholder="••••••••",
                              label_visibility="collapsed")
         if st.button("Accéder →", use_container_width=True):
-            if code == access_code:
+            if code == access_code or code.strip() == access_code.strip():
                 st.session_state["authenticated"] = True
                 st.rerun()
             else:
-                st.error("Code incorrect.")
+                st.error(f"Code incorrect. ({len(code)} chars)")
     return False
 
 if not _check_auth():
