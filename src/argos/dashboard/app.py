@@ -931,8 +931,11 @@ def main():
 
     # ── Diagnostic DB (temporaire) ────────────────────────────
     _eng_url = str(_get_engine().url)
-    _backend = "PostgreSQL ✅" if "postgresql" in _eng_url else f"SQLite ❌ ({_eng_url[:40]})"
-    st.info(f"DB moteur : {_backend}")
+    _backend = "PostgreSQL ✅" if "postgresql" in _eng_url else f"SQLite ❌"
+    _db_in_secrets = "DATABASE_URL" in st.secrets
+    _db_in_env = bool(os.environ.get("DATABASE_URL"))
+    _secret_preview = str(st.secrets.get("DATABASE_URL", ""))[:25] if _db_in_secrets else "—"
+    st.info(f"DB: {_backend} | secrets: {_db_in_secrets} ({_secret_preview}) | env: {_db_in_env}")
 
     # ── Données ───────────────────────────────────────────────
     initial_capital = _initial_capital()
