@@ -69,6 +69,12 @@ def _check_auth() -> bool:
     if st.session_state.get("authenticated"):
         return True
 
+    # Vérification via query param (ex: ?code=xxx) pour accès programmatique
+    qp_code = st.query_params.get("code", "")
+    if qp_code and qp_code == access_code:
+        st.session_state["authenticated"] = True
+        return True
+
     st.markdown("""
     <style>
     html, body, [data-testid="stApp"] {
