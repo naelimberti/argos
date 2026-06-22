@@ -929,6 +929,11 @@ def main():
     </div>
     """, unsafe_allow_html=True)
 
+    # ── Diagnostic DB (temporaire) ────────────────────────────
+    _eng_url = str(_get_engine().url)
+    _backend = "PostgreSQL ✅" if "postgresql" in _eng_url else f"SQLite ❌ ({_eng_url[:40]})"
+    st.info(f"DB moteur : {_backend}")
+
     # ── Données ───────────────────────────────────────────────
     initial_capital = _initial_capital()
     trades_df       = _load_trades()
