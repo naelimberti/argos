@@ -465,11 +465,15 @@ def _session():
 
 
 def _load_trades() -> pd.DataFrame:
-    with _session() as s:
-        rows = s.exec(select(PaperTrade).order_by(PaperTrade.entry_time)).all()
-        if not rows:
-            return pd.DataFrame()
-        records = [r.model_dump() for r in rows]
+    try:
+        with _session() as s:
+            rows = s.exec(select(PaperTrade).order_by(PaperTrade.entry_time)).all()
+            if not rows:
+                return pd.DataFrame()
+            records = [r.model_dump() for r in rows]
+    except Exception as e:
+        st.warning(f"[DB] _load_trades error: {e} | URL: {os.environ.get('DATABASE_URL','NOT SET')[:40]}")
+        return pd.DataFrame()
     df = pd.DataFrame(records)
     for col in ["entry_time", "exit_time"]:
         if col in df.columns:
