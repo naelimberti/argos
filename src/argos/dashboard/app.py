@@ -456,7 +456,6 @@ section[data-testid="stSidebar"] > div { background: #0D1117 !important; }
 # Helpers DB
 # ============================================================
 
-@st.cache_resource
 def _get_engine():
     return get_engine()
 
