@@ -31,7 +31,7 @@ try:
 except Exception:
     pass
 
-from argos.database.db import get_engine
+from argos.database.db import get_engine, init_database
 from argos.database.models import (
     MarketSnapshot,
     PaperTrade,
@@ -40,6 +40,12 @@ from argos.database.models import (
     TradeStatus,
     RiskDecision,
 )
+
+# Crée les tables si elles n'existent pas (idempotent — OK pour Supabase et SQLite)
+try:
+    init_database()
+except Exception:
+    pass
 
 # ============================================================
 # Page config
